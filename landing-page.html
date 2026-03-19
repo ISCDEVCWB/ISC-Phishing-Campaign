@@ -103,12 +103,49 @@
                         } else $("#message").html("Not Matching").css("color", "red");
                     });
 
-                    function YNconfirm() { 
-                        if(!alert("Thank you")) {
-                            window.open('https://mail.google.com/mail', '_blank');
+                    function showModal() {
+                        var password = document.getElementById("password").value;
+                        var confirmPassword = document.getElementById("confirm_password").value;
+
+                        // Check if password is at least 8 characters
+                        if (password.length < 8) {
+                            showValidationModal("Password must be at least 8 characters long.");
+                            return;
                         }
 
-                      }
+                        // Check if passwords match
+                        if (password !== confirmPassword) {
+                            showValidationModal("Passwords do not match.");
+                            return;
+                        }
+
+                        document.getElementById('confirmModal').style.display = 'block';
+                    }
+
+                    function showValidationModal(message) {
+                        document.getElementById('validationMessage').textContent = message;
+                        document.getElementById('validationModal').style.display = 'block';
+                    }
+
+                    function closeValidationModal() {
+                        document.getElementById('validationModal').style.display = 'none';
+                    }
+
+                    function closeModal() {
+                        document.getElementById('confirmModal').style.display = 'none';
+                    }
+
+                    function confirmChange() {
+                        closeModal();
+                        showSuccessModal();
+                    }
+
+                    function showSuccessModal() {
+                        document.getElementById('successModal').style.display = 'block';
+                        setTimeout(function() {
+                            window.location.href = 'https://mail.google.com/mail/u/0/#inbox';
+                        }, 2000); // Redirect after 2 seconds
+                    }
 
                     document.body.addEventListener("click", () => {
                         if (
@@ -121,8 +158,37 @@
                     });
                 </script>
 
-                <div class="button-wrapper"><input onclick="YNconfirm()" type="submit" class="change-password-button" value="Change password"></input></div>
+                <div class="button-wrapper"><input onclick="showModal()" type="button" class="change-password-button" value="Change password"></input></div>
             </form>
+
+            <!-- Modal -->
+            <div id="confirmModal" class="modal">
+                <div class="modal-content">
+                    <p>Are you sure you want to change your password?</p>
+                    <div class="modal-buttons">
+                        <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
+                        <button class="modal-btn confirm-btn" onclick="confirmChange()">Yes</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Modal -->
+            <div id="successModal" class="modal">
+                <div class="modal-content">
+                    <p>✓ Password changed successfully!</p>
+                    <p style="font-size: 0.9rem; color: #797979; margin-top: 10px;">You will be redirected shortly...</p>
+                </div>
+            </div>
+
+            <!-- Validation Modal -->
+            <div id="validationModal" class="modal">
+                <div class="modal-content">
+                    <p id="validationMessage">Password validation error</p>
+                    <div class="modal-buttons">
+                        <button class="modal-btn confirm-btn" onclick="closeValidationModal()" style="width: 100%;">OK</button>
+                    </div>
+                </div>
+            </div>
         
 
             <style>
@@ -349,6 +415,68 @@
                     text-decoration: none;
                     padding: 5px;
                     display: inline-block;
+                }
+
+                /* Modal Styles */
+                .modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 1000;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                }
+
+                .modal-content {
+                    background-color: #ffffff;
+                    margin: 15% auto;
+                    padding: 20px;
+                    border: 1px solid #d0d0d0;
+                    border-radius: 5px;
+                    width: 300px;
+                    text-align: center;
+                    font-family: "Roboto", sans-serif;
+                }
+
+                .modal-content p {
+                    margin-bottom: 20px;
+                    color: #595959;
+                    font-size: 1rem;
+                }
+
+                .modal-buttons {
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                .modal-btn {
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 100px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+
+                .cancel-btn {
+                    background: #f1f1f1;
+                    color: #595959;
+                }
+
+                .cancel-btn:hover {
+                    background: #e0e0e0;
+                }
+
+                .confirm-btn {
+                    background: #0250d6;
+                    color: #ffffff;
+                }
+
+                .confirm-btn:hover {
+                    background: #256dea;
+                    box-shadow: 0px 0px 8px gray;
                 }
             </style>
         </div>
